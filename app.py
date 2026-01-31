@@ -1,27 +1,22 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
-import matplotlib.pyplot as plt
 
-# ------------------ PAGE CONFIG ------------------
+# ---------------- PAGE CONFIG ----------------
 st.set_page_config(
-    page_title="Vijay's Smart Dashboard",
+    page_title="Vijay Smart Dashboard",
     page_icon="🚀",
     layout="wide"
 )
 
-# ------------------ CUSTOM CSS ------------------
+# ---------------- CUSTOM CSS ----------------
 st.markdown("""
 <style>
 .main {
-    background-color: #f5f7fb;
+    background-color: #f4f6fb;
 }
-h1 {
+h1, h2, h3 {
     color: #4B0082;
-}
-.sidebar .sidebar-content {
-    background-color: #111827;
-    color: white;
 }
 .stButton>button {
     background-color: #4B0082;
@@ -32,38 +27,37 @@ h1 {
 </style>
 """, unsafe_allow_html=True)
 
-# ------------------ SIDEBAR ------------------
-st.sidebar.title("⚙️ Menu")
+# ---------------- SIDEBAR ----------------
+st.sidebar.title("📌 Navigation")
 menu = st.sidebar.radio(
-    "Go to",
-    ["🏠 Home", "📊 Data Dashboard", "📁 Upload CSV", "🤖 ML Demo"]
+    "Select Page",
+    ["🏠 Home", "📊 Dashboard", "📁 Upload CSV", "🤖 ML Demo"]
 )
 
 st.sidebar.markdown("---")
-st.sidebar.success("Created by Vijayadharshan❤️")
+st.sidebar.success("Created by Vijayadharshan")
 
-# ------------------ HOME PAGE ------------------
+# ---------------- HOME ----------------
 if menu == "🏠 Home":
     st.title("🚀 Welcome to Vijay's Smart Streamlit App")
     st.subheader("Creative • Interactive • Beginner Friendly")
 
     col1, col2, col3 = st.columns(3)
+    col1.metric("Users", "1,250", "+120")
+    col2.metric("Projects", "15", "+3")
+    col3.metric("Accuracy", "95%", "+2%")
 
-    col1.metric("Users", "1,245", "+120")
-    col2.metric("Projects", "18", "+3")
-    col3.metric("Accuracy", "94%", "+2%")
-
-    st.markdown("### 🌈 What this app can do?")
+    st.markdown("### 🌟 App Features")
     st.write("""
-    - 📊 Interactive data visualization  
-    - 📁 Upload & explore CSV files  
-    - 🤖 Simple Machine Learning demo  
-    - 🎨 Clean & modern UI  
+    ✔ Interactive Dashboard  
+    ✔ CSV Upload & Analysis  
+    ✔ Simple ML Demo  
+    ✔ Modern UI  
     """)
 
-# ------------------ DATA DASHBOARD ------------------
-elif menu == "📊 Data Dashboard":
-    st.title("📊 Interactive Data Dashboard")
+# ---------------- DASHBOARD ----------------
+elif menu == "📊 Dashboard":
+    st.title("📊 Sales Dashboard")
 
     data = pd.DataFrame({
         "Day": ["Mon", "Tue", "Wed", "Thu", "Fri"],
@@ -72,42 +66,35 @@ elif menu == "📊 Data Dashboard":
 
     st.dataframe(data, use_container_width=True)
 
-    fig, ax = plt.subplots()
-    ax.plot(data["Day"], data["Sales"], marker="o")
-    ax.set_title("Weekly Sales Trend")
-    ax.set_ylabel("Sales")
-    ax.set_xlabel("Day")
+    st.subheader("📈 Sales Trend")
+    st.line_chart(data.set_index("Day"))
 
-    st.pyplot(fig)
-
-# ------------------ CSV UPLOAD ------------------
+# ---------------- CSV UPLOAD ----------------
 elif menu == "📁 Upload CSV":
-    st.title("📁 Upload Your CSV File")
+    st.title("📁 Upload CSV File")
 
-    file = st.file_uploader("Upload CSV", type=["csv"])
+    file = st.file_uploader("Upload your CSV file", type=["csv"])
 
-    if file:
+    if file is not None:
         df = pd.read_csv(file)
-        st.success("File uploaded successfully!")
+        st.success("✅ File uploaded successfully!")
 
         st.dataframe(df, use_container_width=True)
-
-        st.markdown("### 📈 Column Statistics")
+        st.subheader("📊 Summary Statistics")
         st.write(df.describe())
 
-# ------------------ ML DEMO ------------------
+# ---------------- ML DEMO ----------------
 elif menu == "🤖 ML Demo":
-    st.title("🤖 Simple ML Prediction Demo")
+    st.title("🤖 Simple ML Prediction (Demo)")
 
-    st.markdown("### 🎯 Predict Result (Demo)")
+    st.write("Predict score based on study & sleep hours")
 
-    hours = st.slider("Study Hours", 0, 10, 5)
-    sleep = st.slider("Sleep Hours", 0, 10, 6)
+    study_hours = st.slider("📘 Study Hours", 0, 10, 5)
+    sleep_hours = st.slider("😴 Sleep Hours", 0, 10, 6)
 
-    score = (hours * 8) + (sleep * 4)
+    predicted_score = (study_hours * 7) + (sleep_hours * 3)
 
-    if st.button("Predict"):
-        st.success(f"🎉 Predicted Score: **{score} / 100**")
-
-        if score > 70:
+    if st.button("🔮 Predict"):
+        st.success(f"🎯 Predicted Score: **{predicted_score} / 100**")
+        if predicted_score >= 70:
             st.balloons()
